@@ -1,1 +1,71 @@
-__pycache__/**
+# ========================
+# Python Bytecode
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ========================
+# Virtual Environments
+# ========================
+venv/
+env/
+.venv/
+.env/
+
+# ========================
+# Distribution / Packaging
+# ========================
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# ========================
+# PyInstaller
+# ========================
+# 生成的可执行文件和临时文件
+*.manifest
+*.spec
+dist/
+build/
+
+# ========================
+# Jupyter Notebook
+# ========================
+.ipynb_checkpoints
+
+# ========================
+# IDE / Editor
+# ========================
+# VSCode
+.vscode/
+# PyCharm
+.idea/
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ========================
+# Logs and Databases
+# ========================
+*.log
+*.sqlite3
+
+# ========================
+# OS Generated Files
+# ========================
+# macOS
+.DS_Store
+# Windows
+Thumbs.db
+desktop.ini
+
+# ========================
+# Others
+# ========================
+*.swp
+*.swo
+*.bak
