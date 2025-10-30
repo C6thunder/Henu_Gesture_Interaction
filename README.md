@@ -8,29 +8,35 @@
 <br>
 
 ___
-## 文件树：
+## 
+<details>
+<summary>文件树：📁HENU_PROJRCT（点击展开）</summary>
+
+```text
 HENU_PROJRCT
-├──  config.py
-├──  hand_command.py
-├──  hand_gesture.py
-├──  main.py
-├──  model
-│  ├──  \_\_init\_\_.py
-│  ├──  keypoint_classifier
-│  │  ├──  keypoint.csv
-│  │  ├──  keypoint_classifier.hdf5
-│  │  ├──  keypoint_classifier.onnx
-│  │  ├──  keypoint_classifier.py
-│  │  ├──  keypoint_classifier.tflite
-│  │  └──  keypoint_classifier_label.csv
-│  └──  point_history_classifier  
-│     ├──  point_history.csv
-│     ├──  point_history_classifier.hdf5
-│     ├──  point_history_classifier.py
-│     ├──  point_history_classifier.tflite
-│     └──  point_history_classifier_label.csv
-├──  README.md
-├──  ts.py
-└──  utils
-   ├──  \_\_init\_\_.py
-   └──  cvfpscalc.py
+├── config.py
+├── hand_command.py
+├── hand_gesture.py
+├── main.py
+├── model
+│   ├── __init__.py
+│   ├── keypoint_classifier
+│   │   ├── keypoint.csv
+│   │   ├── keypoint_classifier.hdf5
+│   │   ├── keypoint_classifier.onnx
+│   │   ├── keypoint_classifier.py
+│   │   ├── keypoint_classifier.tflite
+│   │   └── keypoint_classifier_label.csv
+│   └── point_history_classifier
+│       ├── point_history.csv
+│       ├── point_history_classifier.hdf5
+│       ├── point_history_classifier.py
+│       ├── point_history_classifier.tflite
+│       └── point_history_classifier_label.csv
+├── README.md
+├── ts.py
+└── utils
+    ├── __init__.py
+    └── cvfpscalc.py
+```
+</details> 
