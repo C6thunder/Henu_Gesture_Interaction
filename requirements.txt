@@ -1,0 +1,21 @@
+# === Core ===
+numpy>=1.23.0
+opencv-python>=4.8.0
+mediapipe>=0.10.14
+tensorflow>=2.15.0
+tensorflow-lite>=2.15.0
+
+# === System & Control ===
+pyautogui>=0.9.54
+pynput>=1.7.6
+
+# === Utilities ===
+matplotlib>=3.7.2
+pandas>=2.1.1
+
+# === Optional (调试 & 日志) ===
+tqdm>=4.66.1
+loguru>=0.7.2
+
+# === For cross-platform compatibility ===
+protobuf>=3.20.3
