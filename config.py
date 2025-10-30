@@ -1,4 +1,9 @@
 # hand_command.py
+import os
+
+# --- 获取当前脚本所在目录 ---
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # 手势识别相关参数
 COMMAND_COOLDOWN = 1.0        # 手势命令冷却时间
 OK_COOLDOWN = 1.0             # OK手势切换命令模式冷却
@@ -37,12 +42,15 @@ FINGER_GESTURE_HISTORY_LEN = 16
 # --- CSV 日志 ---
 CSV_BUFFER_SIZE = 20
 
-# --- 模型路径 ---
-KEYPOINT_CLASSIFIER_LABEL_PATH = 'model/keypoint_classifier/keypoint_classifier_label.csv'
-POINT_HISTORY_CLASSIFIER_LABEL_PATH = 'model/point_history_classifier/point_history_classifier_label.csv'
+# --- 模型与数据路径（自动适配运行目录） ---
+KEYPOINT_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint_classifier_label.csv')
+POINT_HISTORY_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history_classifier_label.csv')
 
-KEYPOINT_CSV_PATH = 'model/keypoint_classifier/keypoint.csv'
-POINT_HISTORY_CSV_PATH = 'model/point_history_classifier/point_history.csv'
+KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint.csv')
+POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history.csv')
+
+KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint_classifier.tflite')
+POINT_HISTORY_TFLITE_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history_classifier.tflite')
 
 # --- 可视化参数 ---
 DRAW_KEYPOINT_RADIUS = 5
