@@ -1,6 +1,4 @@
-# hand_command.py
 import os
-
 # --- 获取当前脚本所在目录 ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -36,21 +34,29 @@ MIN_DETECTION_CONF = 0.7
 MIN_TRACKING_CONF = 0.5
 
 # --- 手势历史 ---
-POINT_HISTORY_LEN = 16
-FINGER_GESTURE_HISTORY_LEN = 16
+FINGER_GESTURE_HISTORY_LEN = 16    # 历史点要16个
+POINT_HISTORY_LEN = 21   # 固定点要21个
 
 # --- CSV 日志 ---
 CSV_BUFFER_SIZE = 20
 
-# --- 模型与数据路径（自动适配运行目录） ---
-KEYPOINT_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint_classifier_label.csv')
-POINT_HISTORY_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history_classifier_label.csv')
+## --- 模型与数据路径（自动适配运行目录） ---
+# csv标签
+KEYPOINT_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/lable/keypoint_classifier_label.csv')
+POINT_HISTORY_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/lable/point_history_classifier_label.csv')
 
-KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint.csv')
-POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history.csv')
+# tflite模型
+POINT_HISTORY_TFLITE_PATH = os.path.join(BASE_DIR, 'model/main_model/point_history_classifier.tflite')
+KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'model/main_model/keypoint_classifier.tflite')
 
-KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'model', 'keypoint_classifier', 'keypoint_classifier.tflite')
-POINT_HISTORY_TFLITE_PATH = os.path.join(BASE_DIR, 'model', 'point_history_classifier', 'point_history_classifier.tflite')
+# csv数据
+KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/data/keypoint.csv')
+POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/data/point_history.csv')
+
+# 用于测试
+# KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'model/keypoint_classifier/keypoint.csv')
+# KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'keypoint_data/keypoint_classifier.tflite')
+
 
 # --- 可视化参数 ---
 DRAW_KEYPOINT_RADIUS = 5

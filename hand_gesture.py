@@ -4,7 +4,9 @@ import cv2 as cv
 import numpy as np
 import mediapipe as mp
 from utils import CvFpsCalc
-from model import KeyPointClassifier, PointHistoryClassifier
+# from model_old import KeyPointClassifier, PointHistoryClassifier
+from utils.Classifier.keypoint_classifier import KeyPointClassifier
+from utils.Classifier.point_history_classifier import PointHistoryClassifier
 import config
 
 class HandGestureRecognition:
@@ -31,8 +33,8 @@ class HandGestureRecognition:
             min_tracking_confidence=min_trk_conf
         )
 
-        self.keypoint_classifier = KeyPointClassifier()
-        self.point_history_classifier = PointHistoryClassifier()
+        self.keypoint_classifier = KeyPointClassifier(model_path=config.KEYPOINT_TFLITE_PATH)
+        self.point_history_classifier = PointHistoryClassifier(model_path=config.POINT_HISTORY_TFLITE_PATH )
 
         with open(config.KEYPOINT_CLASSIFIER_LABEL_PATH, encoding='utf-8-sig') as f:
             self.keypoint_labels = [row[0] for row in csv.reader(f)]
