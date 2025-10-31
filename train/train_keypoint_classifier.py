@@ -6,22 +6,26 @@ import tensorflow as tf
 from tensorflow import keras
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+from tqdm.keras import TqdmCallback  # 进度条
 
 # ================== 配置参数 ==================
 CSV_PATH = "CSV/main_csv/main_data/keypoint.csv"          # CSV 数据路径
-MODEL_SAVE_PATH = "test_keypoint_data/run/model/keypoint_classifier.tflite"  # TFLite 保存路径
+BEST_MODEL_SAVE_PATH = "test_keypoint_data/run/model/best_keypoint_classifier.tflite"  # TFLite 保存路径
+LAST_MODEL_SAVE_PATH = "test_keypoint_data/run/model/last_keypoint_classifier.tflite"  # TFLite 保存路径
+
 BEST_MODEL_PATH = "test_keypoint_data/run/model/best_model.h5"      # Keras 保存路径
-CURVE_SAVE_PATH = "test_keypoint_data/run/img/training_curve.png" # 训练曲线保存路径
-EPOCHS = 500
+LAST_MODEL_PATH = "test_keypoint_data/run/model/last_model.h5"      # 最后一轮模型
+CURVE_SAVE_PATH = "test_keypoint_data/run/img/training_curve.png"   # 训练曲线保存路径
+
+EPOCHS = 50
 BATCH_SIZE = 16
 INPUT_DIM = 42                  # 21 个关键点 * 2
 VALIDATION_SPLIT = 0.2
 RANDOM_STATE = 42
 LEARNING_RATE = 0.001
-DROPOUT_RATE = 0.3              # 防止过拟合
-EARLY_STOPPING_MIN_DELTA = 1e-4 # loss 减少幅度低于此值视为无提升
-EARLY_STOPPING_PATIENCE = 20    # loss 无改善连续多少轮停止
-ENABLE_EARLY_STOPPING = True    # 是否启用早停
+DROPOUT_RATE = 0.3
+SAVE_EVERY_N_EPOCHS = 10        # 每隔多少轮保存一次模型
+
 # ============================================
 
 # ---------------- 数据读取 ----------------
@@ -57,35 +61,50 @@ def build_model(input_dim, num_classes):
     return model
 
 # ---------------- 自定义回调 ----------------
-class TFLiteCheckpoint(keras.callbacks.Callback):
-    """在保存最佳 Keras 模型的同时导出 TFLite 模型"""
-    def __init__(self, h5_path, tflite_path, monitor='val_loss'):
+class PeriodicCheckpoint(keras.callbacks.Callback):
+    """每隔 N 轮保存最佳模型和最后模型"""
+    def __init__(self, save_every_n_epochs, best_h5_path, last_h5_path, monitor='val_loss'):
         super().__init__()
-        self.h5_path = h5_path
-        self.tflite_path = tflite_path
+        self.save_every_n_epochs = save_every_n_epochs
+        self.best_h5_path = best_h5_path
+        self.last_h5_path = last_h5_path
         self.monitor = monitor
-        self.best = np.Inf
+        self.best_val = np.Inf
 
     def on_epoch_end(self, epoch, logs=None):
-        current = logs.get(self.monitor)
-        if current is None:
+        current_val = logs.get(self.monitor)
+        if current_val is None:
             return
-        if current < self.best:
-            self.best = current
-            # 保存 Keras 模型
-            self.model.save(self.h5_path)
-            print(f"✅ Epoch {epoch+1}: val_loss improved, saved Keras model to {self.h5_path}")
-            # 导出 TFLite
-            converter = tf.lite.TFLiteConverter.from_keras_model(self.model)
-            tflite_model = converter.convert()
-            with open(self.tflite_path, "wb") as f:
-                f.write(tflite_model)
-            print(f"✅ 同步保存 TFLite 模型至 {self.tflite_path}")
+
+        # 更新最佳模型
+        if current_val < self.best_val:
+            self.best_val = current_val
+            os.makedirs(os.path.dirname(self.best_h5_path), exist_ok=True)
+            self.model.save(self.best_h5_path)
+            print(f"\n✅ Epoch {epoch+1}: val_loss 改进，保存最佳模型至 {self.best_h5_path}")
+
+        # 每隔固定轮保存 last 模型
+        if (epoch + 1) % self.save_every_n_epochs == 0:
+            os.makedirs(os.path.dirname(self.last_h5_path), exist_ok=True)
+            self.model.save(self.last_h5_path)
+            print(f"💾 Epoch {epoch+1}: 每 {self.save_every_n_epochs} 轮保存 last 模型至 {self.last_h5_path}")
+
+# ---------------- h5 转 tflite ----------------
+def convert_h5_to_tflite(h5_path, tflite_path):
+    if not os.path.exists(h5_path):
+        print(f"❌ 模型文件 {h5_path} 不存在")
+        return
+    model = tf.keras.models.load_model(h5_path)
+    converter = tf.lite.TFLiteConverter.from_keras_model(model)
+    tflite_model = converter.convert()
+    os.makedirs(os.path.dirname(tflite_path), exist_ok=True)
+    with open(tflite_path, "wb") as f:
+        f.write(tflite_model)
+    print(f"✅ 已将 {h5_path} 转换为 TFLite 并保存至 {tflite_path}")
 
 # ---------------- 绘制训练曲线 ----------------
 def plot_training_curve(history, save_path):
     plt.figure(figsize=(10,5))
-    # Loss
     plt.subplot(1,2,1)
     plt.plot(history.history['loss'], label='train_loss')
     plt.plot(history.history['val_loss'], label='val_loss')
@@ -93,7 +112,6 @@ def plot_training_curve(history, save_path):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend()
-    # Accuracy
     plt.subplot(1,2,2)
     plt.plot(history.history['accuracy'], label='train_acc')
     plt.plot(history.history['val_accuracy'], label='val_acc')
@@ -126,54 +144,32 @@ def main():
         X, y, test_size=VALIDATION_SPLIT, random_state=RANDOM_STATE, stratify=y
     )
 
-    # ---------------- 回调 ----------------
-    callbacks = [TFLiteCheckpoint(BEST_MODEL_PATH, MODEL_SAVE_PATH, monitor='val_loss')]
-    if ENABLE_EARLY_STOPPING:
-        earlystop_cb = keras.callbacks.EarlyStopping(
-            monitor='val_loss', min_delta=EARLY_STOPPING_MIN_DELTA,
-            patience=EARLY_STOPPING_PATIENCE, restore_best_weights=True, verbose=1
-        )
-        callbacks.append(earlystop_cb)
+    callbacks = [PeriodicCheckpoint(
+        save_every_n_epochs=SAVE_EVERY_N_EPOCHS,
+        best_h5_path=BEST_MODEL_PATH,
+        last_h5_path=LAST_MODEL_PATH
+    ), TqdmCallback(verbose=1)]
 
-    print("\n训练开始，按 Ctrl+C 可中断，之后可选择继续或结束\n")
+    print("\n训练开始，按 Ctrl+C 可中断\n")
 
-    try:
-        history = model.fit(
-            X_train, y_train,
-            validation_data=(X_val, y_val),
-            epochs=EPOCHS,
-            batch_size=BATCH_SIZE,
-            shuffle=True,
-            callbacks=callbacks
-        )
-    except KeyboardInterrupt:
-        print("\n⚠️ 训练中断。")
-        cont = input("输入 'y' 继续训练，其他键结束: ").strip().lower()
-        if cont == 'y':
-            remaining_epochs = EPOCHS - len(model.history.history['loss'])
-            print(f"继续训练 {remaining_epochs} 轮...")
-            history = model.fit(
-                X_train, y_train,
-                validation_data=(X_val, y_val),
-                epochs=remaining_epochs,
-                batch_size=BATCH_SIZE,
-                shuffle=True,
-                callbacks=callbacks
-            )
-        else:
-            print("训练结束，使用当前模型或最佳模型。")
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_val, y_val),
+        epochs=EPOCHS,
+        batch_size=BATCH_SIZE,
+        shuffle=True,
+        callbacks=callbacks,
+        verbose=0  # tqdm 显示进度条
+    )
 
-    # ---------------- 导出最终 TFLite ----------------
-    os.makedirs(os.path.dirname(MODEL_SAVE_PATH), exist_ok=True)
-    if os.path.exists(BEST_MODEL_PATH):
-        model = keras.models.load_model(BEST_MODEL_PATH)
+    # ---------------- 最后一轮保存 last 模型 ----------------
+    os.makedirs(os.path.dirname(LAST_MODEL_PATH), exist_ok=True)
+    model.save(LAST_MODEL_PATH)
+    print(f"\n📂 最后一轮模型已保存至 {LAST_MODEL_PATH}")
 
-    converter = tf.lite.TFLiteConverter.from_keras_model(model)
-    tflite_model = converter.convert()
-    with open(MODEL_SAVE_PATH, "wb") as f:
-        f.write(tflite_model)
-    print(f"\n✅ TFLite 模型已保存至 {MODEL_SAVE_PATH}")
-    print(f"📂 Keras 最佳模型保存在 {BEST_MODEL_PATH}")
+    # ---------------- 转 TFLite ----------------
+    convert_h5_to_tflite(BEST_MODEL_PATH, BEST_MODEL_SAVE_PATH)
+    convert_h5_to_tflite(LAST_MODEL_PATH, LAST_MODEL_SAVE_PATH)
 
     # ---------------- 绘制训练曲线 ----------------
     plot_training_curve(history, CURVE_SAVE_PATH)

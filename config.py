@@ -55,7 +55,7 @@ POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/main_data/point_hi
 
 # 用于测试
 # KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'model/keypoint_classifier/keypoint.csv')
-KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'test_keypoint_data/run/model/keypoint_classifier.tflite')
+KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'test_keypoint_data/run/model/last_keypoint_classifier.tflite')
 
 
 # --- 可视化参数 ---
