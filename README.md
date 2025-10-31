@@ -55,49 +55,95 @@
 <details>
 <summary>点击展开查看</summary>
 
-```text
-Henu_Gesture_Interaction
-├──  config.py
-├──  CSV
-│  ├──  main_csv
-│  │  ├──  main_data
-│  │  │  ├──  keypoint.csv
-│  │  │  └──  point_history.csv
-│  │  └──  main_lable
-│  │     ├──  keypoint_classifier_label.csv
-│  │     └──  point_history_classifier_label.csv
-│  └──  other_csv
-├──  doc
-│  ├──  Close.png
-│  ├──  OK.png
-│  ├──  Open.png
-│  ├──  Point.png
-│  └──  preview.png
-├──  hand_command.py
-├──  hand_gesture.py
-├──  keypoint_data
-│  └──  keypoint_data.csv
-├──  LICENSE
-├──  main.py
-├──  model
-│  ├──  main_model
-│  │  ├──  keypoint_classifier.tflite
-│  │  └──  point_history_classifier.tflite
-│  └──  other_model
-│     └──  keypoint_classifier.tflite
-├──  README.md
-├──  requirements.txt
-├──  train
-│  ├──  __init__.py
-│  ├──  collect_gesture_data.py
-│  └──  train_keypoint_classifier.py
-├──  ts.py
-└──  utils
-   ├──  __init__.py
-   ├──  Classifier
-   │  ├──  keypoint_classifier.py
-   │  └──  point_history_classifier.py
-   └──  cvfpscalc.py
+```mermaid
+%% 目录结构树状图
+flowchart TB
+    A[Henu_Gesture_Interaction]
+    A1[config.py]
+    A2[CSV]
+    A2_1[main_csv]
+    A2_1_1[main_data]
+    A2_1_1_1[keypoint.csv]
+    A2_1_1_2[point_history.csv]
+    A2_1_2[main_lable]
+    A2_1_2_1[keypoint_classifier_label.csv]
+    A2_1_2_2[point_history_classifier_label.csv]
+    A2_2[other_csv]
+    A3[doc]
+    A3_1[Close.png]
+    A3_2[OK.png]
+    A3_3[Open.png]
+    A3_4[Point.png]
+    A3_5[preview.png]
+    A4[hand_command.py]
+    A5[hand_gesture.py]
+    A6[keypoint_data]
+    A6_1[keypoint_data.csv]
+    A7[LICENSE]
+    A8[main.py]
+    A9[model]
+    A9_1[main_model]
+    A9_1_1[keypoint_classifier.tflite]
+    A9_1_2[point_history_classifier.tflite]
+    A9_2[other_model]
+    A9_2_1[keypoint_classifier.tflite]
+    A10[README.md]
+    A11[requirements.txt]
+    A12[train]
+    A12_1[__init__.py]
+    A12_2[collect_gesture_data.py]
+    A12_3[train_keypoint_classifier.py]
+    A13[ts.py]
+    A14[utils]
+    A14_1[__init__.py]
+    A14_2[Classifier]
+    A14_2_1[keypoint_classifier.py]
+    A14_2_2[point_history_classifier.py]
+    A14_3[cvfpscalc.py]
+
+    %% 层级关系
+    A --> A1
+    A --> A2
+    A2 --> A2_1
+    A2_1 --> A2_1_1
+    A2_1_1 --> A2_1_1_1
+    A2_1_1 --> A2_1_1_2
+    A2_1 --> A2_1_2
+    A2_1_2 --> A2_1_2_1
+    A2_1_2 --> A2_1_2_2
+    A2 --> A2_2
+    A --> A3
+    A3 --> A3_1
+    A3 --> A3_2
+    A3 --> A3_3
+    A3 --> A3_4
+    A3 --> A3_5
+    A --> A4
+    A --> A5
+    A --> A6
+    A6 --> A6_1
+    A --> A7
+    A --> A8
+    A --> A9
+    A9 --> A9_1
+    A9_1 --> A9_1_1
+    A9_1 --> A9_1_2
+    A9 --> A9_2
+    A9_2 --> A9_2_1
+    A --> A10
+    A --> A11
+    A --> A12
+    A12 --> A12_1
+    A12 --> A12_2
+    A12 --> A12_3
+    A --> A13
+    A --> A14
+    A14 --> A14_1
+    A14 --> A14_2
+    A14_2 --> A14_2_1
+    A14_2 --> A14_2_2
+    A14 --> A14_3
+
 ```
 
 </details>
