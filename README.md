@@ -56,31 +56,48 @@
 <summary>点击展开查看</summary>
 
 ```text
-HENU_PROJRCT
-├── config.py
-├── hand_command.py
-├── hand_gesture.py
-├── main.py
-├── model
-│   ├── __init__.py
-│   ├── keypoint_classifier
-│   │   ├── keypoint.csv
-│   │   ├── keypoint_classifier.hdf5
-│   │   ├── keypoint_classifier.onnx
-│   │   ├── keypoint_classifier.py
-│   │   ├── keypoint_classifier.tflite
-│   │   └── keypoint_classifier_label.csv
-│   └── point_history_classifier
-│       ├── point_history.csv
-│       ├── point_history_classifier.hdf5
-│       ├── point_history_classifier.py
-│       ├── point_history_classifier.tflite
-│       └── point_history_classifier_label.csv
-├── README.md
-├── ts.py
-└── utils
-    ├── __init__.py
-    └── cvfpscalc.py
+Henu_Gesture_Interaction
+├──  config.py
+├──  CSV
+│  ├──  main_csv
+│  │  ├──  main_data
+│  │  │  ├──  keypoint.csv
+│  │  │  └──  point_history.csv
+│  │  └──  main_lable
+│  │     ├──  keypoint_classifier_label.csv
+│  │     └──  point_history_classifier_label.csv
+│  └──  other_csv
+├──  doc
+│  ├──  Close.png
+│  ├──  OK.png
+│  ├──  Open.png
+│  ├──  Point.png
+│  └──  preview.png
+├──  hand_command.py
+├──  hand_gesture.py
+├──  keypoint_data
+│  └──  keypoint_data.csv
+├──  LICENSE
+├──  main.py
+├──  model
+│  ├──  main_model
+│  │  ├──  keypoint_classifier.tflite
+│  │  └──  point_history_classifier.tflite
+│  └──  other_model
+│     └──  keypoint_classifier.tflite
+├──  README.md
+├──  requirements.txt
+├──  train
+│  ├──  __init__.py
+│  ├──  collect_gesture_data.py
+│  └──  train_keypoint_classifier.py
+├──  ts.py
+└──  utils
+   ├──  __init__.py
+   ├──  Classifier
+   │  ├──  keypoint_classifier.py
+   │  └──  point_history_classifier.py
+   └──  cvfpscalc.py
 ```
 
 </details>
