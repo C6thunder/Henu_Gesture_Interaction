@@ -42,16 +42,16 @@ CSV_BUFFER_SIZE = 20
 
 ## --- 模型与数据路径（自动适配运行目录） ---
 # csv标签
-KEYPOINT_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/lable/keypoint_classifier_label.csv')
-POINT_HISTORY_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/lable/point_history_classifier_label.csv')
+KEYPOINT_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/main_lable/keypoint_classifier_label.csv')
+POINT_HISTORY_CLASSIFIER_LABEL_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/main_lable/point_history_classifier_label.csv')
 
 # tflite模型
 POINT_HISTORY_TFLITE_PATH = os.path.join(BASE_DIR, 'model/main_model/point_history_classifier.tflite')
 KEYPOINT_TFLITE_PATH = os.path.join(BASE_DIR, 'model/main_model/keypoint_classifier.tflite')
 
 # csv数据
-KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/data/keypoint.csv')
-POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/data/point_history.csv')
+KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/main_data/keypoint.csv')
+POINT_HISTORY_CSV_PATH = os.path.join(BASE_DIR, 'CSV/main_csv/main_data/point_history.csv')
 
 # 用于测试
 # KEYPOINT_CSV_PATH = os.path.join(BASE_DIR, 'model/keypoint_classifier/keypoint.csv')
